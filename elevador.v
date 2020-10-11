@@ -210,7 +210,7 @@ endmodule
 
 module  FlipFlopD(input wire D, clk, preset, rst, output reg Q);
     // flip flop tipo D 
-    always @ (posedge clk,posedge rst) Q <= (rst ? preset : D ); 
+    always @ (posedge clk,posedge rst) Q  <= (rst ? preset : D ); 
 endmodule
 
 module FlipFlopJK(input j,k,clk,rst, output reg Q);
@@ -308,14 +308,14 @@ module SistemaElevador(input wire [7:0] piso,
     wire senialPisoSiguiente;
 
     assign senialPisoActual = pisoComprimido[0] | pisoComprimido[1] | pisoComprimido[2] |pisoComprimido[3] ; 
-    assign senialPisoSiguiente = nextFloor[0] | nextFloor[1] |nextFloor[2] |nextFloor[3] ;
+    assign senialPisoSiguiente = nextFloor[0] | nextFloor[1] | nextFloor[2] | nextFloor[3] ;
     //se guardan los datos mientras todos los bits sean 0 si almenos 1 es diferente de 0 entonces se actualiza el valor 
     FlipFlopD   FFD1(pisoComprimido[0], clk & senialPisoActual, 1'b1,rst,actualFloorFix[0]);
     FlipFlopD   FFD2(pisoComprimido[1], clk & senialPisoActual,  1'b0,rst,actualFloorFix[1]);
     FlipFlopD   FFD3(pisoComprimido[2], clk & senialPisoActual,  1'b0,rst,actualFloorFix[2]);
     FlipFlopD   FFD4(pisoComprimido[3], clk & senialPisoActual,  1'b0,rst,actualFloorFix[3]);
 
-    FlipFlopD   FFD5(nextFloor[0], clk & senialPisoSiguiente, 1'b1, rst , nextFloorFix[0]);
+    FlipFlopD   FFD5(nextFloor[0], clk & senialPisoSiguiente,  1'b1, rst , nextFloorFix[0]);
     FlipFlopD   FFD6(nextFloor[1], clk & senialPisoSiguiente,  1'b0, rst , nextFloorFix[1]);
     FlipFlopD   FFD7(nextFloor[2], clk & senialPisoSiguiente,  1'b0, rst , nextFloorFix[2]);
     FlipFlopD   FFD8(nextFloor[3], clk & senialPisoSiguiente,  1'b0, rst , nextFloorFix[3]);
@@ -337,7 +337,7 @@ module SistemaElevador(input wire [7:0] piso,
     assign  actualizarDireccion = accion[1] | accion[0];
 
     //memoria del estado se actualiza solo si actualizarDireccion es 1
-    FlipFlopD FFD9(accion[0],clkSlow & actualizarDireccion ,1'b0,rst,direccion);
+    FlipFlopD FFD9(accion[0],clk & actualizarDireccion ,1'b0,rst,direccion);
     
     //---------- Señales internas necesarias para el funcionamiento de la FSM puerta ----------------------
     wire [1:0] controlMux1; //control del mux que manda la señal necesario a la FSM puerta
